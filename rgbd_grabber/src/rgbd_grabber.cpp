@@ -160,11 +160,11 @@ void RGBDGrabber::depthImageCallback(const sensor_msgs::ImageConstPtr& imgMsg)
             std::cout<<"RGBDGrabber :: saved depth file "<<buffer<<"   time stamp  "<<currentTimestamp<<std::endl;
 
             /*************** TEST SAVING **************************/
-            cv::Mat savedImage;
-            savedImage = cv::imread(completeName.c_str(),-1);
-            imshow("Input",cv_ptr->image);
-            imshow("Output",savedImage);
-            cv::waitKey(0);
+//            cv::Mat savedImage;
+//            savedImage = cv::imread(completeName.c_str(),-1);
+//            imshow("Input",cv_ptr->image);
+//            imshow("Output",savedImage);
+//            cv::waitKey(0);
 
             m_bSaveOneFrame = false;
             m_iSequenceNumber++;
