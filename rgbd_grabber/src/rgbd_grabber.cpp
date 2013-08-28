@@ -159,8 +159,9 @@ void RGBDGrabber::depthImageCallback(const sensor_msgs::ImageConstPtr& imgMsg)
             m_fIndexFile<<setprecision(15)<<buffer<<" "<<currentTimestamp<<"\n";
 
             cv::Mat ucharMat;
-            cv_ptr->image.convertTo(ucharMat, CV_16UC1);
-            imwrite(completeName.c_str(),ucharMat);
+//            cv_ptr->image.convertTo(ucharMat, CV_16UC1);
+//            imwrite(completeName.c_str(),ucharMat);
+            imwrite(completeName.c_str(), cv_ptr->image);
             std::cout<<"RGBDGrabber :: saved depth file "<<buffer<<"   time stamp  "<<currentTimestamp<<std::endl;
 
             m_bSaveOneFrame = false;
@@ -248,15 +249,17 @@ void RGBDGrabber::syncAndSave()
                         std::cout<<"RGBDGrabber :: saved color file "<<buffer1<<"   time stamp  "<<currentFrame.m_Timestamp<<std::endl;
                         cv::Mat ucharMat;
                         nextFrame.m_Image->image.convertTo(ucharMat, CV_16UC1);
-                        imwrite(completeName2.c_str(),ucharMat);
+//                        imwrite(completeName2.c_str(),ucharMat);
+                        imwrite(completeName2.c_str(),nextFrame.m_Image->image);
                         std::cout<<"RGBDGrabber :: saved depth file "<<buffer2<<"   time stamp  "<<nextFrame.m_Timestamp<<std::endl;
                     } else {
                         cv::Mat ucharMat;
                         currentFrame.m_Image->image.convertTo(ucharMat, CV_16UC1);
-                        imwrite(completeName1.c_str(),ucharMat);
+//                        imwrite(completeName1.c_str(),ucharMat);
+                        imwrite(completeName1.c_str(),currentFrame.m_Image->image);
                         std::cout<<"RGBDGrabber :: saved depth file "<<buffer1<<"   time stamp  "<<currentFrame.m_Timestamp<<std::endl;
 
-                        imwrite(completeName2.c_str(),currentFrame.m_Image->image);
+                        imwrite(completeName2.c_str(),nextFrame.m_Image->image);
                         std::cout<<"RGBDGrabber :: saved color file "<<buffer2<<"   time stamp  "<<nextFrame.m_Timestamp<<std::endl;
                     }
                 }

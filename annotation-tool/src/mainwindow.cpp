@@ -55,7 +55,7 @@ void MainWindow::on_actionOpen_triggered(){
     if(!_fileName.isEmpty()){
         QString info_doc = qApp->applicationDirPath();
         info_doc.remove("bin");
-        info_doc.append("info_app.xml");;
+        info_doc.append("/info_app.xml");;
 
         boost::filesystem3::path p(_fileName.toStdString());
         std::string path = p.parent_path().string();
@@ -928,7 +928,7 @@ void MainWindow::init(){
     // Read the information left for the user in the previous session
     QString info_doc = qApp->applicationDirPath();
     info_doc.remove("bin");
-    info_doc.append("info_app.xml");;
+    info_doc.append("/info_app.xml");
 
     boost::property_tree::ptree root;
     read_xml(info_doc.toStdString(), root);
@@ -1223,7 +1223,7 @@ void MainWindow::showInitialMessage(){
             // Write false in the output file
             QString info_doc = qApp->applicationDirPath();
             info_doc.remove("bin");
-            info_doc.append("info_app.xml");;
+            info_doc.append("/info_app.xml");;
 
             boost::property_tree::ptree root;
 
