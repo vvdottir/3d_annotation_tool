@@ -149,7 +149,8 @@ void RGBDGrabber::depthImageCallback(const sensor_msgs::ImageConstPtr& imgMsg)
                 }
                 return;
             } else {
-                // nothing to do right now
+                // return without saving this image (no depth)
+                return;
             }
         } else {
             m_iCurrentDarkDepthImageCount = 0;
