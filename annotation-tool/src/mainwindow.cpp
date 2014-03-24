@@ -254,7 +254,7 @@ void MainWindow::on_boxHeightLess_clicked(){
 }
 
 // Save pcd file action
-void MainWindow::on_actionSave_PCD_File_triggered(){
+/*void MainWindow::on_actionSave_PCD_File_triggered(){
     QString fileName = QFileDialog::getSaveFileName(this,
                                                     tr("Save file"),
                                                     _fileName,
@@ -267,7 +267,43 @@ void MainWindow::on_actionSave_PCD_File_triggered(){
     else{
         QMessageBox::warning(this, "Error", "Pcd file not saved.");
     }
+}*/
+
+void MainWindow:: on_actionSave_PCD_File_triggered(){
+    QString fileNamePCD = QFileDialog::getSaveFileName(this,
+                                                    tr("Save file"), //not sure about this maybe tr("Save .pcd and .xml file"),
+                                                    _fileName.remove(_fileName.size()-4,4),
+                                                    tr(" "));
+
+    QString fileNameXML = fileNamePCD;
+
+    if(!fileNamePCD.isEmpty()){
+        // Save the .pcd file
+        fileNamePCD.append(".pcd");
+        pcl::io::savePCDFile(fileNamePCD.toStdString(), *_cloud);
+        _fileName = fileNamePCD;
+        _cloudModified = false;
+
+        // Save the objects' information
+        fileNameXML.append(".xml");
+        if(objectsInfo.getDeskLength() != -1){
+            objectsInfo.exportObjectsInformation(fileNameXML, _fileName, _scenario);
+        }
+        else
+            QMessageBox::warning(this,
+                                 "XML file not saved",
+                                 "The objects' information has not been saved because there is no information.");
+
+    }
+    else{
+        QMessageBox::warning(this, "Error", "Files not saved.");
+    }
 }
+
+
+
+
+
 
 // Actions to take when an item in the information tree
 // widget is selected
