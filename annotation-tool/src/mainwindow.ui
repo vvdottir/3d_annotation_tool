@@ -1270,7 +1270,6 @@
      </property>
      <addaction name="actionShow_info_messages"/>
     </widget>
-    <addaction name="actionUndo"/>
     <addaction name="separator"/>
     <addaction name="actionAutomatic_plane_detection"/>
     <addaction name="actionManual_plane_definition"/>
@@ -1355,6 +1354,8 @@
    <addaction name="actionConfirm_position"/>
    <addaction name="actionDelete_object"/>
    <addaction name="separator"/>
+   <addaction name="actionUndo_2"/>
+   <addaction name="actionRedo"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -1741,6 +1742,36 @@
    </property>
    <property name="shortcut">
     <string>F4</string>
+   </property>
+  </action>
+  <action name="actionUndo_2">
+   <property name="icon">
+    <iconset resource="../icons/icons.qrc">
+     <normaloff>:/icons/Undo.png</normaloff>:/icons/Undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo an Action (Ctrl+Z)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="../icons/icons.qrc">
+     <normaloff>:/icons/Redo.png</normaloff>:/icons/Redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo an Action (Ctrl+Y)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>

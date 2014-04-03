@@ -52,6 +52,13 @@ void selectObject::readData(int type){
         ptree& allObjects = root.get_child("List_of_objects");
         for(ptree::iterator it = allObjects.begin(); it != allObjects.end(); it++){
             _listOfObjects += QString::fromStdString(allObjects.get<std::string>("Object"));
+
+
+            _listOfObjects.sort();
+
+
+
+
             allObjects.pop_front();
         }
 

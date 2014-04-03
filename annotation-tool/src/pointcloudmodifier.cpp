@@ -1,12 +1,22 @@
 #include "pointcloudmodifier.h"
-
+#include <pcl/point_types.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/filters/project_inliers.h>
 #include <pcl/common/transforms.h>
 #include <pcl/common/angles.h>
 #include <pcl/filters/passthrough.h>
+#include <pcl/kdtree/kdtree.h>
+#include <pcl/filters/extract_indices.h>
 
+
+#include <pcl/sample_consensus/method_types.h>
+#include <pcl/sample_consensus/model_types.h>
+#include <pcl/sample_consensus/ransac.h>
+#include <pcl/segmentation/extract_polygonal_prism_data.h>
 #include <math.h>
+#include <pcl/segmentation/extract_clusters.h>
+#include <pcl/surface/convex_hull.h>
+
 
 pointCloudModifier::pointCloudModifier():
     _planeCoefficients (new pcl::ModelCoefficients)
@@ -14,31 +24,94 @@ pointCloudModifier::pointCloudModifier():
 }
 
 
-void pointCloudModifier::automaticTableDetection(pcl::PointCloud<pointT>::Ptr cloud_in,
+ void pointCloudModifier::automaticTableDetection(pcl::PointCloud<pointT>::Ptr cloud_in,
                                                  pcl::PointCloud<pointT>::Ptr cloud_out){
 
-    pcl::PointCloud<pointT>::Ptr cloudProjected (new pcl::PointCloud<pointT>);
+     printf("%u points found\n original", cloud_in->size());
 
-    // Create the segmentation object
-    pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
-    pcl::SACSegmentation<pointT> seg;
-    seg.setOptimizeCoefficients (true);
-    seg.setModelType (pcl::SACMODEL_PLANE);
-    seg.setMethodType (pcl::SAC_RANSAC);
-    seg.setDistanceThreshold (0.01);
+             pcl::PointCloud<pointT>::Ptr cloudProjected (new pcl::PointCloud<pointT>);
+             pcl::PointCloud<pointT>::Ptr cloudProjected_1 (new pcl::PointCloud<pointT>);
+             pcl::PointCloud<pointT>::Ptr cloudProjected_2 (new pcl::PointCloud<pointT>);
 
-    // Stores the coefficents to the plane (a * x + b * y + c * z = d)
-    seg.setInputCloud (cloud_in);
-    seg.segment (*inliers, *_planeCoefficients);
+             // Create the segmentation object
+             pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
+             pcl::SACSegmentation<pointT> seg;
+             seg.setOptimizeCoefficients (true);
+             seg.setModelType (pcl::SACMODEL_PLANE);
+             seg.setMethodType (pcl::SAC_RANSAC);
+            // seg.setMaxIterations (10);
+             seg.setDistanceThreshold (0.01);
+
+             // Stores the coefficents to the plane (a * x + b * y + c * z = d)
+             seg.setInputCloud (cloud_in);
+             seg.segment (*inliers, *_planeCoefficients);
 
 
-    // Project the model inliers
-    pcl::ProjectInliers<pointT> proj;
+
+             printf("%u points found\n", inliers->indices.size());
+
+
+             // Indices extractor object
+                     pcl::ExtractIndices<pointT> extract;
+
+                     // Extract the inliers
+                     extract.setInputCloud (cloud_in);
+                     extract.setIndices (inliers);
+                     extract.setNegative (true);
+                     extract.filter (*cloudProjected_1);
+
+                     printf("%u points found\n after", cloudProjected_1->size());
+
+
+
+
+                   // Stores the coefficents to the plane (a * x + b * y + c * z = d)
+                     seg.setInputCloud (cloudProjected_1);
+                     seg.segment (*inliers, *_planeCoefficients);
+
+                     printf("%u points found\n", inliers->indices.size());
+
+
+                     // Indices extractor object
+                             pcl::ExtractIndices<pointT> extract_2;
+
+                             // Extract the inliers
+                             extract_2.setInputCloud (cloudProjected_1);
+                             extract_2.setIndices (inliers);
+                             extract_2.setNegative (true);
+                             extract_2.filter (*cloudProjected_2);
+
+                             printf("%u points found\n after", cloudProjected_2->size());
+
+
+                             seg.setInputCloud (cloudProjected_2);
+                             seg.segment (*inliers, *_planeCoefficients);
+
+                             printf("%u points found\n", inliers->indices.size());
+
+
+                             // Indices extractor object
+                                     pcl::ExtractIndices<pointT> extract_3;
+
+                                     // Extract the inliers
+                                     extract_3.setInputCloud (cloudProjected_2);
+                                     extract_3.setIndices (inliers);
+                                     extract_3.setNegative (true);
+                                     extract_3.filter (*cloudProjected);
+
+                                     printf("%u points found\n after", cloudProjected->size());
+
+
+
+
+   pcl::ProjectInliers<pointT> proj;
     proj.setModelType (pcl::SACMODEL_PLANE);
     proj.setIndices (inliers);
     proj.setInputCloud (cloud_in);
     proj.setModelCoefficients (_planeCoefficients);
     proj.filter (*cloudProjected);
+
+
 
     // Move the coordenate system of the point cloud to the table plane
 
@@ -77,6 +150,10 @@ void pointCloudModifier::automaticTableDetection(pcl::PointCloud<pointT>::Ptr cl
                 *cloud_out,
                 (Eigen::Affine3f)total_transformation);
 }
+
+
+
+
 
 
 void pointCloudModifier::manualTableDetection(pcl::PointCloud<pointT>::Ptr cloud_in,
@@ -210,3 +287,4 @@ void pointCloudModifier::rotate_z_180(pcl::PointCloud<pointT>::Ptr cloud_in,
                 *cloud_out,
                 transformation);
 }
+

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Mar 24 11:49:36 2014
+** Created: Sun Mar 30 23:45:25 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -66,6 +66,8 @@ public:
     QAction *actionQSR_values;
     QAction *actionDescription_of_scene_using_QSR;
     QAction *actionSave_QSR_in_txt_file;
+    QAction *actionUndo_2;
+    QAction *actionRedo;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout_4;
     QVBoxLayout *verticalLayout;
@@ -273,6 +275,16 @@ public:
         actionDescription_of_scene_using_QSR->setObjectName(QString::fromUtf8("actionDescription_of_scene_using_QSR"));
         actionSave_QSR_in_txt_file = new QAction(MainWindow);
         actionSave_QSR_in_txt_file->setObjectName(QString::fromUtf8("actionSave_QSR_in_txt_file"));
+        actionUndo_2 = new QAction(MainWindow);
+        actionUndo_2->setObjectName(QString::fromUtf8("actionUndo_2"));
+        QIcon icon18;
+        icon18.addFile(QString::fromUtf8(":/icons/Undo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionUndo_2->setIcon(icon18);
+        actionRedo = new QAction(MainWindow);
+        actionRedo->setObjectName(QString::fromUtf8("actionRedo"));
+        QIcon icon19;
+        icon19.addFile(QString::fromUtf8(":/icons/Redo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRedo->setIcon(icon19);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         horizontalLayout_4 = new QHBoxLayout(centralWidget);
@@ -474,9 +486,9 @@ public:
 
         buttonPitchLess = new QPushButton(layoutWidget);
         buttonPitchLess->setObjectName(QString::fromUtf8("buttonPitchLess"));
-        QIcon icon18;
-        icon18.addFile(QString::fromUtf8(":/icons/less.png"), QSize(), QIcon::Normal, QIcon::Off);
-        buttonPitchLess->setIcon(icon18);
+        QIcon icon20;
+        icon20.addFile(QString::fromUtf8(":/icons/less.png"), QSize(), QIcon::Normal, QIcon::Off);
+        buttonPitchLess->setIcon(icon20);
 
         gridLayout->addWidget(buttonPitchLess, 16, 0, 1, 1);
 
@@ -496,13 +508,13 @@ public:
 
         buttonRollLess = new QPushButton(layoutWidget);
         buttonRollLess->setObjectName(QString::fromUtf8("buttonRollLess"));
-        buttonRollLess->setIcon(icon18);
+        buttonRollLess->setIcon(icon20);
 
         gridLayout->addWidget(buttonRollLess, 13, 0, 1, 1);
 
         buttonYLess = new QPushButton(layoutWidget);
         buttonYLess->setObjectName(QString::fromUtf8("buttonYLess"));
-        buttonYLess->setIcon(icon18);
+        buttonYLess->setIcon(icon20);
 
         gridLayout->addWidget(buttonYLess, 6, 0, 1, 1);
 
@@ -515,27 +527,27 @@ public:
 
         buttonXMore = new QPushButton(layoutWidget);
         buttonXMore->setObjectName(QString::fromUtf8("buttonXMore"));
-        QIcon icon19;
-        icon19.addFile(QString::fromUtf8(":/icons/plus.png"), QSize(), QIcon::Normal, QIcon::Off);
-        buttonXMore->setIcon(icon19);
+        QIcon icon21;
+        icon21.addFile(QString::fromUtf8(":/icons/plus.png"), QSize(), QIcon::Normal, QIcon::Off);
+        buttonXMore->setIcon(icon21);
 
         gridLayout->addWidget(buttonXMore, 2, 2, 1, 1);
 
         buttonZLess = new QPushButton(layoutWidget);
         buttonZLess->setObjectName(QString::fromUtf8("buttonZLess"));
-        buttonZLess->setIcon(icon18);
+        buttonZLess->setIcon(icon20);
 
         gridLayout->addWidget(buttonZLess, 10, 0, 1, 1);
 
         buttonRollMore = new QPushButton(layoutWidget);
         buttonRollMore->setObjectName(QString::fromUtf8("buttonRollMore"));
-        buttonRollMore->setIcon(icon19);
+        buttonRollMore->setIcon(icon21);
 
         gridLayout->addWidget(buttonRollMore, 13, 2, 1, 1);
 
         buttonYawLess = new QPushButton(layoutWidget);
         buttonYawLess->setObjectName(QString::fromUtf8("buttonYawLess"));
-        buttonYawLess->setIcon(icon18);
+        buttonYawLess->setIcon(icon20);
 
         gridLayout->addWidget(buttonYawLess, 19, 0, 1, 1);
 
@@ -674,7 +686,7 @@ public:
 
         buttonPitchMore = new QPushButton(layoutWidget);
         buttonPitchMore->setObjectName(QString::fromUtf8("buttonPitchMore"));
-        buttonPitchMore->setIcon(icon19);
+        buttonPitchMore->setIcon(icon21);
 
         gridLayout->addWidget(buttonPitchMore, 16, 2, 1, 1);
 
@@ -686,7 +698,7 @@ public:
 
         buttonYawMore = new QPushButton(layoutWidget);
         buttonYawMore->setObjectName(QString::fromUtf8("buttonYawMore"));
-        buttonYawMore->setIcon(icon19);
+        buttonYawMore->setIcon(icon21);
 
         gridLayout->addWidget(buttonYawMore, 19, 2, 1, 1);
 
@@ -699,19 +711,19 @@ public:
 
         buttonYMore = new QPushButton(layoutWidget);
         buttonYMore->setObjectName(QString::fromUtf8("buttonYMore"));
-        buttonYMore->setIcon(icon19);
+        buttonYMore->setIcon(icon21);
 
         gridLayout->addWidget(buttonYMore, 6, 2, 1, 1);
 
         buttonXLess = new QPushButton(layoutWidget);
         buttonXLess->setObjectName(QString::fromUtf8("buttonXLess"));
-        buttonXLess->setIcon(icon18);
+        buttonXLess->setIcon(icon20);
 
         gridLayout->addWidget(buttonXLess, 2, 0, 1, 1);
 
         buttonZMore = new QPushButton(layoutWidget);
         buttonZMore->setObjectName(QString::fromUtf8("buttonZMore"));
-        buttonZMore->setIcon(icon19);
+        buttonZMore->setIcon(icon21);
 
         gridLayout->addWidget(buttonZMore, 10, 2, 1, 1);
 
@@ -776,7 +788,6 @@ public:
         menuObjects->addAction(actionInsert_new_object);
         menuObjects->addAction(actionConfirm_position);
         menuObjects->addAction(actionDelete_object);
-        menuEdit->addAction(actionUndo);
         menuEdit->addSeparator();
         menuEdit->addAction(actionAutomatic_plane_detection);
         menuEdit->addAction(actionManual_plane_definition);
@@ -822,6 +833,8 @@ public:
         mainToolBar->addAction(actionConfirm_position);
         mainToolBar->addAction(actionDelete_object);
         mainToolBar->addSeparator();
+        mainToolBar->addAction(actionUndo_2);
+        mainToolBar->addAction(actionRedo);
         toolBar->addAction(actionCoordinate_system);
         toolBar->addAction(actionUp);
         toolBar->addAction(actionFront);
@@ -926,6 +939,16 @@ public:
         actionDescription_of_scene_using_QSR->setShortcut(QApplication::translate("MainWindow", "F2", 0, QApplication::UnicodeUTF8));
         actionSave_QSR_in_txt_file->setText(QApplication::translate("MainWindow", "Save QSR in .txt file", 0, QApplication::UnicodeUTF8));
         actionSave_QSR_in_txt_file->setShortcut(QApplication::translate("MainWindow", "F4", 0, QApplication::UnicodeUTF8));
+        actionUndo_2->setText(QApplication::translate("MainWindow", "Undo", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        actionUndo_2->setToolTip(QApplication::translate("MainWindow", "Undo an Action (Ctrl+Z)", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        actionUndo_2->setShortcut(QApplication::translate("MainWindow", "Ctrl+Z", 0, QApplication::UnicodeUTF8));
+        actionRedo->setText(QApplication::translate("MainWindow", "Redo", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        actionRedo->setToolTip(QApplication::translate("MainWindow", "Redo an Action (Ctrl+Y)", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        actionRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Y", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem = treeWidget->headerItem();
         ___qtreewidgetitem->setText(0, QApplication::translate("MainWindow", "Information", 0, QApplication::UnicodeUTF8));
 

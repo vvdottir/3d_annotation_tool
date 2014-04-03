@@ -46,6 +46,7 @@ void pp_callbacks (const pcl::visualization::PointPickingEvent& event, void* vie
     event.getPoint(pickedPoints.x, pickedPoints.y, pickedPoints.z);
     nPoints++;
     picked=true;
+
 }
 
 
@@ -64,17 +65,25 @@ void viewerInteractor::getPointPicked(pcl::PointXYZRGB *point){
     point->z=pickedPoints.z;
     picked = false;
 
+
     // Draw an sphere arround the selected point
     QString sphere = QString::number(_numberOfSpheres);
-    _viewer->addSphere(*point, 0.009, 1, 1, 0.0, sphere.toStdString());
+    _viewer->addSphere(*point, 0.009, 3, 3, 0.0, sphere.toStdString());
+
     _numberOfSpheres++;
 }
+
 
 void viewerInteractor::getPointsPicked(int nPoints, std::vector<pointT> *pointsPicked){
     for(int i=0; i<nPoints; i++){
         pcl::PointXYZRGB point;
         getPointPicked(&point);
         pointsPicked->push_back(point);
+
+        printf("%u points found\n",pointsPicked->size());
+
+
+
     }
 }
 
@@ -152,6 +161,9 @@ void viewerInteractor::removeDrawnClouds(){
     }
 }
 
+
+
+
 void viewerInteractor::removeCoordinateSystem(){
     _viewer->removeCoordinateSystem();
     render();
@@ -159,7 +171,7 @@ void viewerInteractor::removeCoordinateSystem(){
 
 void viewerInteractor::addCoordinateSystem(){
     _viewer->addCoordinateSystem(0.5);
-    render();
+    //render();
 }
 
 void viewerInteractor::defineBoundingBox(pcl::PointXYZ objectPose,

@@ -27,5 +27,7 @@
         <file>viewFront.png</file>
         <file>viewLeft.png</file>
         <file>viewRight.png</file>
+        <file>Undo.png</file>
+        <file>Redo.png</file>
     </qresource>
 </RCC>

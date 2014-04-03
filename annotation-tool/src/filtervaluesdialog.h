@@ -7,6 +7,7 @@ namespace Ui {
 class filtervaluesdialog;
 }
 
+
 class filtervaluesdialog : public QDialog
 {
     Q_OBJECT
@@ -24,6 +25,8 @@ private:
     Ui::filtervaluesdialog *ui;
 
     float _leafValue;
+
+
 };
 
 #endif // FILTERVALUESDIALOG_H

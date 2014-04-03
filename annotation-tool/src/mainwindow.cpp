@@ -12,6 +12,9 @@
 #include "QDesktopServices"
 #include "QUrl"
 #include "QListWidgetItem"
+#include <QUndoGroup>
+#include <QUndoStack>
+
 
 #include <pcl/filters/project_inliers.h>
 #include <pcl/filters/voxel_grid.h>
@@ -20,7 +23,7 @@
 
 #include <math.h>
 #include <eigen3/Eigen/Dense>
-
+#include <QTime>
 #include <iostream>
 #include <fstream>
 
@@ -273,14 +276,16 @@ void MainWindow:: on_actionSave_PCD_File_triggered(){
     QString fileNamePCD = QFileDialog::getSaveFileName(this,
                                                     tr("Save file"), //not sure about this maybe tr("Save .pcd and .xml file"),
                                                     _fileName.remove(_fileName.size()-4,4),
-                                                    tr(" "));
+                                                       tr("PCD Files(*.pcd);;XML files (*.xml)"));
+                                                       //tr(" "));
 
     QString fileNameXML = fileNamePCD;
 
     if(!fileNamePCD.isEmpty()){
         // Save the .pcd file
         fileNamePCD.append(".pcd");
-        pcl::io::savePCDFile(fileNamePCD.toStdString(), *_cloud);
+       // pcl::io::savePCDFileBinary(fileNamePCD.toStdString(), *_cloud);
+        pcl::io::savePCDFileBinary(fileNamePCD.toStdString(), *_cloud);
         _fileName = fileNamePCD;
         _cloudModified = false;
 
@@ -400,6 +405,45 @@ void MainWindow::on_actionAutomatic_plane_detection_triggered(){
     }
 }
 
+void MainWindow::on_actionUndo_2_triggered(){
+
+    // Reload the previous point cloud and visualize it
+   // pcl::copyPointCloud(*_cloudUndo, *_cloud);
+    //visualize();
+
+    // Reload the previous point cloud and visualize it
+    pcl::copyPointCloud(*_cloudUndo, *_cloud);
+    visualize();
+
+    // If the undo is done after the segmentation, delete the information
+    // of the tree widget and allow the user to do the segmentation again
+    if(!_ui->actionDesk_segmentation->isEnabled()){
+        clearInfoTreeWidget();
+        _ui->actionDesk_segmentation->setEnabled(true);
+        objectsInfo.clear();
+
+
+    }
+
+    // Disable this action
+    _ui->actionUndo_2->setEnabled(false);
+
+
+        undoStack->undo();
+
+
+}
+
+
+
+void MainWindow::on_actionRedo_triggered()
+{
+    undoStack->redo();
+}
+
+
+
+
 // Rotate the point cloud 180º in the z axis
 void MainWindow::on_actionRotate_z_180_triggered(){
     if(!_pcdLoaded)
@@ -407,9 +451,16 @@ void MainWindow::on_actionRotate_z_180_triggered(){
         QMessageBox::warning(this, "Error", "Firstly, you must load a pcd file.");
     }
     else{
+       // QUndoCommand *addCommand = new AddCommand(DiagramItem::Box, diagramScene);
+
         cloudModifier.rotate_z_180(_cloud, _cloud);
         visualize();
         _cloudModified = true;
+       // QUndoCommand *addCommand = new AddCommand(cloudModifier.rotate_z_180(););
+        //undoStack->push(new cloudModifier.rotate_z_180(_cloud,_cloud););
+       // QUndoCommand* on_actionRotate_z_180_triggered() = new QUndoCommand();
+       // undoStack->push(on_actionRotate_z_180_triggered());
+
     }
 }
 
@@ -424,11 +475,17 @@ void MainWindow::on_actionManual_plane_definition_triggered(){
     }
     else{
         // First pick three points of the table plane
+
         if(_showInfoMsgs) QMessageBox::information(this,
                                                    "Pick points",
                                                    "Pick three points of the table with shift+left mouse button.");
 
         viewInteractor.getPointsPicked(3, &tablePoints);
+       // pointsPicked->clear();
+      // tablePoints.clear();
+
+        delay(2);
+
 
         // Manual plane definition of the desk plane and move to the plane x-y
         cloudModifier.manualTableDetection(_cloud, _cloud, tablePoints);
@@ -439,6 +496,16 @@ void MainWindow::on_actionManual_plane_definition_triggered(){
     }
 }
 
+
+//Added
+void MainWindow::delay(int secondsToWait )
+{
+    QTime dieTime = QTime::currentTime().addSecs( secondsToWait );
+    while( QTime::currentTime() < dieTime )
+    {
+        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+    }
+}
 // Desk segmentation
 void MainWindow::on_actionDesk_segmentation_triggered(){
     if(!_pcdLoaded | !_planeDefined)
@@ -491,6 +558,9 @@ void MainWindow::on_actionDesk_segmentation_triggered(){
                                                        "Pick the lower right corner of the table with shift+left mouse button");
             viewInteractor.getPointPicked(&pointPicked);
 
+
+
+
             // Align the x axis with the lower edge of the table and calculate the table length
             cloudModifier.align_x_with_edge(_cloud, _cloud, pointPicked);
             pcl::PointXYZ origin(0,0,0);
@@ -502,6 +572,7 @@ void MainWindow::on_actionDesk_segmentation_triggered(){
                                                        "Pick a point",
                                                        "Pick a point on the upper edge of the table with shift+left mouse button");
             viewInteractor.getPointPicked(&pointPicked);
+
 
             // Eliminate points below the table
             // Min value of 0 remove points from the table -> set to -0.02
@@ -526,7 +597,7 @@ void MainWindow::on_actionDesk_segmentation_triggered(){
             visualize();
             _cloudModified = true;
             _planeSegmentated = true;
-            _ui->actionUndo->setEnabled(true);
+            _ui->actionUndo_2->setEnabled(true);
 
             // Remind to save it
             if(_showInfoMsgs) QMessageBox::information(this,
@@ -825,6 +896,7 @@ void MainWindow::on_actionSave_PCD_and_export_objects_info_triggered()
         // Save the .pcd file
         fileNamePCD.append(".pcd");
         pcl::io::savePCDFile(fileNamePCD.toStdString(), *_cloud);
+      // pcl::io::savePCDFileBinary(fileNamePCD.toStdString(), *_cloud);
         _fileName = fileNamePCD;
         _cloudModified = false;
 
@@ -854,7 +926,7 @@ void MainWindow::on_actionShow_info_messages_toggled(bool arg1)
 }
 
 // Undo function
-void MainWindow::on_actionUndo_triggered()
+/*void MainWindow::on_actionUndo_triggered()
 {
     // Reload the previous point cloud and visualize it
     pcl::copyPointCloud(*_cloudUndo, *_cloud);
@@ -871,6 +943,7 @@ void MainWindow::on_actionUndo_triggered()
     // Disable this action
     _ui->actionUndo->setEnabled(false);
 }
+*/
 
 // Downsampling function
 void MainWindow::on_actionDownsample_point_cloud_triggered()
@@ -891,8 +964,8 @@ void MainWindow::on_actionDownsample_point_cloud_triggered()
     sor.filter (*_cloud);
     visualize();
 
-    // Enable Undo function
-    _ui->actionUndo->setEnabled(true);
+    // Enable  function
+    _ui->actionUndo_2->setEnabled(true);
 }
 
 // QSR values displayed in the terminal
@@ -966,6 +1039,9 @@ void MainWindow::on_actionSave_QSR_in_txt_file_triggered()
 void MainWindow::init(){
     //Initialization of the UI
     _ui->setupUi(this);
+
+    undoStack = new QUndoStack(this);
+    undoStack->setUndoLimit(10);
 
     // Start the bool variables
     _pcdLoaded = false;
@@ -1231,6 +1307,8 @@ void MainWindow::displayObjectsInfo(){
 void MainWindow::clearInfoTreeWidget(){
     _ui->treeWidget->clear();
 }
+
+
 
 void MainWindow::confirmObjectPosition(){
     _insertingObject = false;

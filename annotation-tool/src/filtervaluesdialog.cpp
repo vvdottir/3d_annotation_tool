@@ -1,6 +1,7 @@
 #include "filtervaluesdialog.h"
 #include "ui_filtervaluesdialog.h"
 
+
 filtervaluesdialog::filtervaluesdialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::filtervaluesdialog)

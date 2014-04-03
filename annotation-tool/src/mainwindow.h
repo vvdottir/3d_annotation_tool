@@ -9,6 +9,8 @@
 #include "viewerinteractor.h"
 #include "objectsinformation.h"
 
+
+
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 
@@ -17,8 +19,12 @@
 
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
+
+class QUndoStack;
+class QUndoView;
+class QActionGroup;
 
 class MainWindow : public QMainWindow
 {
@@ -34,6 +40,13 @@ public:
 // All the slots to interact with the application
 // More details about them in the .cpp file
 private slots:
+
+    //void ShowUndoStack();
+
+    void on_actionUndo_2_triggered();
+
+    void on_actionRedo_triggered();
+
     void on_actionOpen_triggered();
 
     void on_actionExit_triggered();
@@ -120,7 +133,7 @@ private slots:
 
     void on_actionShow_info_messages_toggled(bool arg1);
 
-    void on_actionUndo_triggered();
+    //void on_actionUndo_triggered();
 
     void on_actionDownsample_point_cloud_triggered();
 
@@ -178,6 +191,10 @@ private:
     bool _insertingObject, _objectModifed;
     bool _itemSelected, _cloudModified;
     bool _showInfoMsgs, _showInitialMsg;
+
+    QActionGroup *actionGroup;
+    QUndoStack *undoStack;
+    QUndoView *undoView;
 
     /** \brief Function to initialize
       */
@@ -266,6 +283,10 @@ private:
     /** \brief Confirm the object position
       */
     void confirmObjectPosition();
+
+    /** \delay added
+      */
+    void delay(int secondsToWait);
 
 };
 
